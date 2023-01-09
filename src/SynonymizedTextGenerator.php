@@ -40,13 +40,14 @@ class SynonymizedTextGenerator
     public function generate(string $content, array $search, array $replaces): string
     {
         preg_match_all($this->regex, $content, $matches);
+        $number = crc32(implode('', $replaces));
 
-        $synonymized = collect($matches[0])->map(function ($match) {
+        $synonymized = collect($matches[0])->map(function ($match) use ($number) {
             $data = explode('|', trim($match, '{}'));
 
             return [
                 'search' => $match,
-                'value'  => collect($data)->random()
+                'value'  => collect($data)->at($number % count($data))
             ];
         });
 

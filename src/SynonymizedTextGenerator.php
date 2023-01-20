@@ -44,10 +44,12 @@ class SynonymizedTextGenerator
 
         $synonymized = collect($matches[0])->map(function ($match) use ($number) {
             $data = explode('|', trim($match, '{}'));
+            $index = $number % count($data);
+            $arrayOfWords = collect($data)->toArray();
 
             return [
                 'search' => $match,
-                'value'  => collect($data)->at($number % count($data))
+                'value'  => $arrayOfWords[$index]
             ];
         });
 
